@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario Clínica</title>
+</head>
+<body>
+  <h2>Formulario de Registro</h2>
+  <form id="formulario">
+    <label>Nombre:</label>
+    <input type="text" name="nombre" required><br><br>
+
+    <label>Email:</label>
+    <input type="email" name="email" required><br><br>
+
+    <label>Servicio:</label>
+    <select name="servicio">
+      <option value="Consulta General">Consulta General</option>
+      <option value="Pediatría">Pediatría</option>
+      <option value="Nutrición">Nutrición</option>
+    </select><br><br>
+
+    <button type="submit">Enviar</button>
+  </form>
+
+  <p id="mensaje"></p>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbw8X_BJx-W87liW4GlTwriViEjP_oS96YXf6uxnLrBXcUyUvh6ojiC9XZlte0IkTUtM/exec";
+
+    document.getElementById("formulario").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+
+      fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(res => res.json())
+      .then(response => {
+        document.getElementById("mensaje").innerText = "¡Formulario enviado con éxito!";
+        document.getElementById("formulario").reset();
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById("mensaje").innerText = "Error al enviar.";
+      });
+    });
+  </script>
+</body>
+</html>
